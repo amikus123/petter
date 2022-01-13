@@ -18,9 +18,8 @@ export const uploadTemporaryFile = async (
     const fileLocation = `${location}/${randomName}`;
 
     const storageRef = ref(myStorage, fileLocation);
-    await uploadBytes(storageRef, f).then(() => {
-      console.log("uploaded a file");
-    });
+    await uploadBytes(storageRef, f)
+    console.log("uploaded a file")
     return returnResponse("uploaded a file", false, randomName);
   } catch (e) {
     const text = `Failed to upload a file: ${e}`;
@@ -34,7 +33,7 @@ export const getImageLink = async (fileName: string, location: string) => {
     const fileLocation = `${location}/${fileName}`;
     return await getDownloadURL(ref(myStorage, fileLocation));
   } catch (e) {
-    const text = `Failed to upload a file: ${e}`;
+    const text = `Failed to upload a image: ${e}`;
     console.error(text);
     return "";
   }
@@ -47,9 +46,8 @@ export const delteTemporaryImage = async (
   try {
     const fileLocation = `${location}/${fileName}`;
     const storageRef = ref(myStorage, fileLocation);
-    deleteObject(storageRef).then(() => {
-      console.log("uploaded a file");
-    });
+    await deleteObject(storageRef)    
+    console.log("deleted a file");
     return returnResponse("Deleted a file");
   } catch (e) {
     const text = `Failed to upload a file: ${e}`;

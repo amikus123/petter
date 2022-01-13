@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { storagePaths } from "../const/firestore";
 import {
@@ -6,36 +6,58 @@ import {
   getImageLink,
   uploadTemporaryFile,
 } from "../utils/firebase/storage";
-const ImageUploader = () => {
-  const [previousImageId, setPreviousImageId] = useState<string | null>(null);
-  const [errorText, setErrorText] = useState("");
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
+import LoadingButton from "@mui/lab/LoadingButton";
+import styled from "styled-components";
+interface ImageUploaderProps {
+  setImageSrc: (s: string) => void;
+  setPreviousImageId: (s: string) => void;
+  previousImageId: string | null;
+}
+
+const MyStack = styled(Stack)`
+ && {
+  margin-bottom: 1rem;
+   }  `;
+
+const ImageUploader = ({
+  setImageSrc,
+  previousImageId,
+  setPreviousImageId,
+}: ImageUploaderProps) => {
+  const defaulText = "Please upload profile image";
+  const [text, setText] = useState(defaulText);
+  const [imageUpload, setImageUpload] = useState(false);
+
   const { images } = storagePaths;
   const verifyFileSubmission = async (f: File) => {
-    // check type, size
     if (f.type.indexOf("image") === -1) {
-      setErrorText("File is not an image");
+      setText("File is not an image");
     } else if (f.size > 1000000) {
-      setErrorText("File is too big");
+      setText("File is too big");
     } else {
+      setImageUpload(true);
+
       const res = await uploadTemporaryFile(f, images);
+      setImageUpload(false);
+
       if (res.error) {
+        setText(res.data);
         // show error ot sth
       } else {
         if (previousImageId !== null) {
           delteTemporaryImage(previousImageId, images);
-          setPreviousImageId(res.data);
           // remvoe prevoius im
         }
+        setText("");
+        setPreviousImageId(res.data);
         const newSrc = await getImageLink(res.data, images);
         setImageSrc(newSrc);
       }
     }
   };
+
   return (
-    <div>
-      {imageSrc && <img src={imageSrc} alt="XD" />}
-      {errorText}
+    <MyStack alignItems="center" spacing={1} justifyContent="center">
       <input
         accept="image/*"
         className=""
@@ -45,11 +67,11 @@ const ImageUploader = () => {
         onChange={(e) => {
           const fileList = e?.target?.files;
           if (!fileList) {
-            setErrorText("Unexcpected error");
+            setText("Unexcpected error");
           } else if (fileList?.length > 1) {
-            setErrorText("Tried to upload too many files");
+            setText("Tried to upload too many files");
           } else if (fileList?.length === 0) {
-            setErrorText("You failed to upload a file");
+            setText("You failed to upload a file");
           } else {
             const file: File = fileList[0];
             verifyFileSubmission(file);
@@ -57,11 +79,20 @@ const ImageUploader = () => {
         }}
       />
       <label htmlFor="raised-button-file">
-        <Button variant="contained" component="span" className="">
-          Upload
-        </Button>
+        <LoadingButton
+          component="span"
+          loading={imageUpload}
+          loadingIndicator=""
+          loadingPosition="end"
+          variant="contained"
+        >
+          {imageUpload ? "Loading..." : "Upload an image"}
+        </LoadingButton>
       </label>
-    </div>
+      <Typography color={text === defaulText ? "black" : "red"}>
+        {text}
+      </Typography>
+    </MyStack>
   );
 };
 
