@@ -8,9 +8,19 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "12.0.7",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "@mui/material": "^5.2.8",
+    "@mui/styled-engine-sc": "^5.1.0",
+    "firebase": "^9.6.2",
+    "formik-mui": "^4.0.0-alpha.3",
+    "formik-mui-lab": "^1.0.0-alpha.3",
+    "next": "^12.0.8-canary.20",
+    "next-auth": "^4.1.0",
+    "next-firebase-auth": "^1.0.0-canary.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-material-file-upload": "^0.0.4",
+    "styled-components": "^5.3.3",
+    "uuidv4": "^6.2.12"
   },
   "devDependencies": {
     "@types/node": "17.0.8",
