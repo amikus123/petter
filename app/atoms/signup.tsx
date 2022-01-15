@@ -13,31 +13,51 @@ export interface SignInInterface {
   humanGender: string;
 }
 
-export const signFormAtom = atom({
-  key: "signForm",
+export interface HumanForm{
+  name: string;
+  bio: string;
+  imageId: string | null;
+  gender: string;
+}
+export interface PetForm{
+  name: string;
+  bio: string;
+  imageId: string | null;
+  gender: string;
+  species:string;
+}
+
+
+export const humanSigninFormAtom = atom({
+  key: "humanSigninFormAtom",
   default: {
-    humanName: "",
-    petName: "",
-    petBio: "",
-    humanBio: "",
-    petSpecies: species[0],
-    petImageId: null,
-    humanImageId: null,
-    petGender: genders[0],
-    humanGender: genders[0],
-  } as SignInInterface,
-});
+    name: "",
+    bio: "",
+    imageId: null,
+    gender: genders[0],
+  } as HumanForm,
+})
+
+export const petSigninFormAtom = atom({
+  key: "petSigninFormAtom",
+  default: {
+    name: "",
+    bio: "",
+    imageId: null,
+    gender: genders[0],
+    species:species[0]
+  } as PetForm,
+})
+
+
 
 const checkIfObjIsReady = (
-  obj: SignInInterface,
-  prefix: "pet" | "human" | "" = ""
+  obj: HumanForm | PetForm,
 ) => {
   let isReady = true;
-  console.log("fire");
   Object.entries(obj).map((item) => {
     const [key, value] = item;
-
-    if (key.indexOf(prefix) === 0 && (value === "" || value === null)) {
+    if (value === "" || value === null) {
       isReady = false;
     }
   });
@@ -46,9 +66,11 @@ const checkIfObjIsReady = (
 export const signFormSelector = selector({
   key: "signFormSelector",
   get: ({ get }) => {
-    const values = get(signFormAtom);
-    const isHumanReady = checkIfObjIsReady(values, "human");
-    const isPetReady = checkIfObjIsReady(values, "pet");
+    const humanValues= get(humanSigninFormAtom);
+    const petValues = get(petSigninFormAtom);
+
+    const isHumanReady = checkIfObjIsReady(humanValues);
+    const isPetReady = checkIfObjIsReady(petValues);
     return { isHumanReady, isPetReady };
   },
 });

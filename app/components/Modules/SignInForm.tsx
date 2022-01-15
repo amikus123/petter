@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
 import {
-  Button,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -11,39 +8,36 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { species } from "../../const/general";
-import { capitalizeFirstLetter } from "../../utils/generealFunctions";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { SignInInterface } from "../../atoms/signup";
-import { signFormAtom } from "../../../app/atoms/signup";
+import { capitalizeFirstLetter,camelToSplit } from "../../utils/generealFunctions";
+import { HumanForm, PetForm } from "../../atoms/signup";
 import styled from "styled-components";
-import { FormOption } from "../signin/PetForm";
+import { FormOption } from "../signin/SignupForm";
 
 const MyStack = styled(Stack)`
   width: 100%;
 `;
 interface SingInForm {
   formOptions: FormOption[];
+  formValues:PetForm | HumanForm;
+  setValues:(arg: HumanForm | PetForm) => void;
 }
-const SignInForm = ({ formOptions }: SingInForm) => {
-  const [signFormState, setSignFormState] = useRecoilState(signFormAtom);
-  const handleChange = (name: keyof SignInInterface, val: string) => {
-    const newVal = { ...signFormState };
+const SignInForm = ({ formOptions,formValues,setValues }: SingInForm) => {
+  const handleChange = (name: keyof HumanForm, val: string) => {
+    const newVal = { ...formValues };
     newVal[name] = val;
-    setSignFormState(newVal);
+    setValues(newVal);
   };
   return (
     <MyStack spacing={2}>
-      {JSON.stringify(formOptions)}
       {formOptions.map((item, index) => {
-        const { valueName } = item;
+        const { valueName } = item
         if (item.options) {
           return (
             <FormControl component="fieldset" key={index}>
               <FormLabel component="legend">Species</FormLabel>
               <RadioGroup
                 aria-label="species"
-                value={signFormState[valueName]}
+                value={formValues[valueName]}
                 onChange={(e) => {
                   handleChange(valueName, e.target.value);
                 }}
@@ -70,8 +64,8 @@ const SignInForm = ({ formOptions }: SingInForm) => {
               fullWidth
               id={valueName}
               name={valueName}
-              label={valueName}
-              value={signFormState[valueName]}
+              label={camelToSplit(valueName)}
+              value={formValues[valueName]}
               onChange={(e) => {
                 handleChange(valueName, e.target.value);
               }}
@@ -80,49 +74,7 @@ const SignInForm = ({ formOptions }: SingInForm) => {
         }
       })}
 
-      {/* <TextField
-        fullWidth
-        id="nick"
-        name="nick"
-        label="Nick"
-        value={signFormState.nick}
-        onChange={(e) => {
-          handleChange("nick", e.target.value);
-        }}
-      />
-      <TextField
-        fullWidth
-        id="bio"
-        name="bio"
-        label="Bio"
-        value={signFormState.bio}
-        onChange={(e) => {
-          handleChange("bio", e.target.value);
-        }}
-      /> */}
-      {/* <FormControl component="fieldset">
-        <FormLabel component="legend">Species</FormLabel>
-        <RadioGroup
-          aria-label="species"
-          value={signFormState.species}
-          onChange={(e) => {
-            handleChange("species", e.target.value);
-          }}
-          defaultValue={signFormState.species}
-          name="radio-buttons-group"
-        >
-          {species.map((item, index) => {
-            return (
-              <FormControlLabel
-                value={item}
-                control={<Radio />}
-                label={capitalizeFirstLetter(item)}
-                key={index}
-              />
-            );
-          })}
-        </RadioGroup>
-      </FormControl> */}
+   
     </MyStack>
   );
 };

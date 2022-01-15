@@ -16,3 +16,10 @@ export const returnResponse= <T>(
 export const capitalizeFirstLetter = (str:string)  =>{
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export const camelToSplit = (str:string)  =>{
+
+  const filteredText = str.match(/([A-Z]?[^A-Z]*)/g) || []
+  return capitalizeFirstLetter(filteredText.slice(0,-1).join(" "))
+
+}

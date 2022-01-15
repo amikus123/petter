@@ -9,25 +9,28 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import styled from "styled-components";
 interface ImageUploaderProps {
+  buttonText?: string;
   setImageSrc: (s: string) => void;
   setPreviousImageId: (s: string) => void;
   previousImageId: string | null;
 }
 
 const MyStack = styled(Stack)`
- && {
-  margin-bottom: 1rem;
-   }  `;
+  && {
+    margin-bottom: 1rem;
+  }
+`;
 
 const ImageUploader = ({
   setImageSrc,
   previousImageId,
   setPreviousImageId,
+  buttonText = "Upload an image",
 }: ImageUploaderProps) => {
-  const defaulText = "Please upload profile image";
+  // made it so clena this up
+  const defaulText = "";
   const [text, setText] = useState(defaulText);
   const [imageUpload, setImageUpload] = useState(false);
-
   const { images } = storagePaths;
   const verifyFileSubmission = async (f: File) => {
     if (f.type.indexOf("image") === -1) {
@@ -39,7 +42,6 @@ const ImageUploader = ({
 
       const res = await uploadTemporaryFile(f, images);
       setImageUpload(false);
-
       if (res.error) {
         setText(res.data);
         // show error ot sth
@@ -58,6 +60,7 @@ const ImageUploader = ({
 
   return (
     <MyStack alignItems="center" spacing={1} justifyContent="center">
+      {JSON.stringify([setImageSrc, previousImageId, setPreviousImageId])}
       <input
         accept="image/*"
         className=""
@@ -86,7 +89,7 @@ const ImageUploader = ({
           loadingPosition="end"
           variant="contained"
         >
-          {imageUpload ? "Loading..." : "Upload an image"}
+          {imageUpload ? "Loading..." : buttonText}
         </LoadingButton>
       </label>
       <Typography color={text === defaulText ? "black" : "red"}>
