@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getProviders, signIn } from "next-auth/react";
 import {
-  Avatar,
-  Button,
   Container,
   Collapse,
-  Hidden,
   IconButton,
 } from "@mui/material";
 import styled from "styled-components";
@@ -17,13 +14,11 @@ import {
   petSigninFormAtom,
   signFormSelector,
 } from "../../app/atoms/signup";
-import SignupForm, {
-  SigninFormNames,
-} from "../../app/components/Pages/signup/SignupForm";
+import SignupForm  from "../../app/components/Pages/signup/SignupForm";
 import BackIcon from "@mui/icons-material/ArrowBack";
 
 interface SignInProps {
-  providers: any[];
+  providers: Record<string,any>
 }
 
 const MyContainer = styled(Container)`
@@ -49,7 +44,6 @@ const SignIn = ({ providers }: SignInProps) => {
   const [showPetForm, setShowPetForm] = useState(true);
   const [showHumanForm, setShowHumanForm] = useState(true);
 
-  const [loading, setLoading] = useState(false);
   const [humanSignin, setHumanSignin] = useRecoilState(humanSigninFormAtom);
   const [petSignin, setPetSignin] = useRecoilState(petSigninFormAtom);
   const formStates = useRecoilValue(signFormSelector);
@@ -91,7 +85,7 @@ const SignIn = ({ providers }: SignInProps) => {
       },
       buttonText: "Sign up with google",
       handleButtonClick: () => {
-        setShowPetForm(true);
+        signIn(providers?.google.id, { callbackUrl: "/" });
       },
       formState: formStates.isHumanReady,
       setValues: setHumanValues,
@@ -108,6 +102,7 @@ const SignIn = ({ providers }: SignInProps) => {
 
   return (
     <MyContainer>
+      {JSON.stringify(providers)}
       <Collapse in={showPetForm} collapsedSize={0}>
         {showPetForm && <SignupForm formSchema={schemas.pet} inputId="1" />}
       </Collapse>

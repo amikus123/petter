@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { useSession } from 'next-auth/react'
+import { useSession, UseSessionOptions ,getSession} from 'next-auth/react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -14,3 +14,12 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+export async function getServerSideProps(context: any) {
+  const session = await getSession(context);
+  return {
+    props: {
+      session,
+    },
+  };
+}
