@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getProviders, signIn } from "next-auth/react";
-import { Avatar, Button, Container, Collapse, Hidden } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Container,
+  Collapse,
+  Hidden,
+  IconButton,
+} from "@mui/material";
 import styled from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -13,6 +20,8 @@ import {
 import SignupForm, {
   SigninFormNames,
 } from "../../app/components/Pages/signup/SignupForm";
+import BackIcon from "@mui/icons-material/ArrowBack";
+
 interface SignInProps {
   providers: any[];
 }
@@ -38,18 +47,18 @@ export interface FormSchema {
 }
 const SignIn = ({ providers }: SignInProps) => {
   const [showPetForm, setShowPetForm] = useState(true);
-  const [showHumanForm,setShowHumanForm] = useState(true);
+  const [showHumanForm, setShowHumanForm] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [humanSignin, setHumanSignin] = useRecoilState(humanSigninFormAtom);
   const [petSignin, setPetSignin] = useRecoilState(petSigninFormAtom);
   const formStates = useRecoilValue(signFormSelector);
 
-  useEffect(()=>{
-    setTimeout(()=>{
-      setShowHumanForm(!showPetForm)
-    },100)
-  },[showPetForm])
+  useEffect(() => {
+    setTimeout(() => {
+      setShowHumanForm(!showPetForm);
+    }, 150);
+  }, [showPetForm]);
   const setPetValues = (v: PetForm | HumanForm) => {
     const xd = v as PetForm;
     setPetSignin(xd);
@@ -89,13 +98,27 @@ const SignIn = ({ providers }: SignInProps) => {
     },
   };
 
+  const BackButton = () => {
+    return (
+      <IconButton aria-label="back">
+        <BackIcon />
+      </IconButton>
+    );
+  };
+
   return (
     <MyContainer>
       <Collapse in={showPetForm} collapsedSize={0}>
         {showPetForm && <SignupForm formSchema={schemas.pet} inputId="1" />}
       </Collapse>
       <Collapse in={showHumanForm} collapsedSize={0}>
-        {!showPetForm && <SignupForm formSchema={schemas.human} inputId="2" />}
+        {!showPetForm && (
+          <SignupForm
+            formSchema={schemas.human}
+            inputId="2"
+            topChildren={<BackButton />}
+          />
+        )}
       </Collapse>
     </MyContainer>
   );

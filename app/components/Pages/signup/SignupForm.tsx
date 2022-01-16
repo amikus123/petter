@@ -46,11 +46,14 @@ const ButtonContainer = styled(Container)`
   justify-content: center;
 
 `
+const MyButton = styled(Button)`
+text-align:center;`
 interface PetFormProps {
   formSchema: FormSchema;
   inputId: string;
+  topChildren?:React.ReactNode
 }
-const SignupForm = ({ formSchema, inputId }: PetFormProps) => {
+const SignupForm = ({ formSchema, inputId,topChildren }: PetFormProps) => {
   const [showForm, setShowFomr] = useState(false);
   const {
     buttonText,
@@ -64,6 +67,7 @@ const SignupForm = ({ formSchema, inputId }: PetFormProps) => {
   } = formSchema;
   return (
     <div>
+      {topChildren}
       <Stack alignItems="center" spacing={2} justifyContent="center">
         <Avatar
           src={formValues.image ?? imgDefault}
@@ -88,9 +92,9 @@ const SignupForm = ({ formSchema, inputId }: PetFormProps) => {
       </Collapse>
       <ButtonContainer>
         <Zoom in={formState && showForm}>
-          <Button variant="contained" onClick={handleButtonClick}>
+          <MyButton variant="contained" onClick={handleButtonClick} >
             {buttonText}
-          </Button>
+          </MyButton>
         </Zoom>
       </ButtonContainer>
     </div>

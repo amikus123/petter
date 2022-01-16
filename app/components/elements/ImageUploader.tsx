@@ -62,15 +62,15 @@ const ImageUploader = ({
   return (
     <MyStack alignItems="center" spacing={1} justifyContent="center">
       <LoadingButton
+        sx={{ textAlign: "center" }}
         component="label"
         htmlFor={inputId}
         loading={imageUpload}
         loadingIndicator=""
         loadingPosition="end"
         variant="contained"
-        // tabIndex={false}
         onFocus={() => {
-          inputRef?.current?.focus()
+          inputRef?.current?.focus();
         }}
       >
         <input
