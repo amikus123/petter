@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProviders, signIn } from "next-auth/react";
+import { getProviders, signIn,useSession,signOut } from "next-auth/react";
 import {
   Container,
   Collapse,
@@ -61,6 +61,7 @@ const SignIn = ({ providers }: SignInProps) => {
     const xd = v as HumanForm;
     setHumanSignin(xd);
   };
+  // these schmes are used to create forms
   const schemas: Record<string, FormSchema> = {
     pet: {
       imgDefault: "/defaultPet.jpg",
@@ -99,10 +100,14 @@ const SignIn = ({ providers }: SignInProps) => {
       </IconButton>
     );
   };
+  const { data } = useSession()
 
   return (
     <MyContainer>
-      {JSON.stringify(providers)}
+      {JSON.stringify(data)}
+      <button  onClick={()=>{signOut()}}>asdasdads</button>
+      <button  onClick={()=>{ signIn(providers?.google.id, { callbackUrl: "/auth/signup" });}}>asdasdads</button>
+
       <Collapse in={showPetForm} collapsedSize={0}>
         {showPetForm && <SignupForm formSchema={schemas.pet} inputId="1" />}
       </Collapse>
