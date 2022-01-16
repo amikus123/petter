@@ -1,4 +1,4 @@
-import { uuid } from "uuidv4";
+import { v4 as uuidv4 } from 'uuid';
 import {
   deleteObject,
   getDownloadURL,
@@ -14,7 +14,7 @@ export const uploadTemporaryFile = async (
   location: string
 ): Promise<GenericResponse<string>> => {
   try {
-    const randomName = uuid();
+    const randomName = uuidv4()
     const fileLocation = `${location}/${randomName}`;
 
     const storageRef = ref(myStorage, fileLocation);

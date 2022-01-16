@@ -11,7 +11,7 @@ import {
 import { capitalizeFirstLetter,camelToSplit } from "../../utils/generealFunctions";
 import { HumanForm, PetForm } from "../../atoms/signup";
 import styled from "styled-components";
-import { FormOption } from "../signin/SignupForm";
+import { FormOption } from "../Pages/signup/SignupForm";
 
 const MyStack = styled(Stack)`
   width: 100%;
@@ -33,21 +33,24 @@ const SignInForm = ({ formOptions,formValues,setValues }: SingInForm) => {
         const { valueName } = item
         if (item.options) {
           return (
-            <FormControl component="fieldset" key={index}>
-              <FormLabel component="legend">Species</FormLabel>
+            <FormControl component="fieldset"  key={index}>
+              <FormLabel component="legend"  >{capitalizeFirstLetter(valueName)} </FormLabel>
               <RadioGroup
-                aria-label="species"
+              
+                aria-label={valueName}
                 value={formValues[valueName]}
                 onChange={(e) => {
                   handleChange(valueName, e.target.value);
                 }}
-                // defaultValue={item.default}
-                name="radio-buttons-group"
+                name={valueName}
+
               >
                 {item.options.map((item, index) => {
                   return (
                     <FormControlLabel
+
                       value={item}
+                      id={item}
                       control={<Radio />}
                       label={capitalizeFirstLetter(item)}
                       key={index}

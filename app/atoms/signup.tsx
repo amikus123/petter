@@ -1,28 +1,16 @@
 import { atom, selector } from "recoil";
 import { genders, species } from "../const/general";
 
-export interface SignInInterface {
-  humanName: string;
-  petName: string;
-  petBio: string;
-  humanBio: string;
-  petSpecies: string;
-  petImageId: string | null;
-  humanImageId: string | null;
-  petGender: string;
-  humanGender: string;
-}
-
 export interface HumanForm{
   name: string;
   bio: string;
-  imageId: string | null;
+  image: string | null;
   gender: string;
 }
 export interface PetForm{
   name: string;
   bio: string;
-  imageId: string | null;
+  image: string | null;
   gender: string;
   species:string;
 }
@@ -33,7 +21,7 @@ export const humanSigninFormAtom = atom({
   default: {
     name: "",
     bio: "",
-    imageId: null,
+    image: null,
     gender: genders[0],
   } as HumanForm,
 })
@@ -43,7 +31,7 @@ export const petSigninFormAtom = atom({
   default: {
     name: "",
     bio: "",
-    imageId: null,
+    image: null,
     gender: genders[0],
     species:species[0]
   } as PetForm,
